@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS - Gestión de Usuarios</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <div class="contenedor">
+        <header>
+            <h1>Sistema POS - Personal</h1>
+            <div id="mensaje"></div>
+        </header>
+
+        <!-- Controles para cambiar de vista -->
+        <div class="controles">
+            <button id="btn-ver-lista" class="btn activo">Ver Usuarios</button>
+            <button id="btn-ver-form" class="btn">Agregar Usuario</button>
+        </div>
+
+        <!-- VISTA 1: Listado de Usuarios -->
+        <section id="vista-lista">
+            <h2>Usuarios Registrados</h2>
+            <table id="tabla-usuarios">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Identificación</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filas generadas dinámicamente mediante JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- VISTA 2: Formulario -->
+        <section id="vista-form" class="oculto">
+            <h2>Registrar Nuevo Usuario</h2>
+            <form id="form-usuario">
+                <div class="grupo-input">
+                    <label>Identificación:</label>
+                    <input type="text" name="identificacion" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Apellido:</label>
+                    <input type="text" name="apellido" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" name="correo" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Teléfono:</label>
+                    <input type="text" name="telefono" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Nombre de Usuario:</label>
+                    <input type="text" name="usuario" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Contraseña:</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="grupo-input">
+                    <label>Rol (POS):</label>
+                    <select name="rol">
+                        <option value="cajero">Cajero</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-registrar">Registrar Usuario</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Lógica de control y consumo de API -->
+    <script src="js/usuarios.js"></script>
+</body>
+</html>
