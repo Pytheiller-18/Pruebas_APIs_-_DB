@@ -32,12 +32,19 @@ btnVerForm.addEventListener("click", () => {
 function mostrarMensaje(texto, tipo) {
     divMensaje.textContent = texto;
     divMensaje.className = tipo;
-    
+
     // Ocultar la notificación tras 4 segundos
-    setTimeout(() => { 
-        divMensaje.style.display = "none"; 
-        divMensaje.className = ""; 
+    setTimeout(() => {
+        divMensaje.style.display = "none";
+        divMensaje.className = "";
     }, 4000);
+}
+
+// Crea una celda de tabla con texto seguro
+function crearCelda(valor) {
+    const td = document.createElement("td");
+    td.textContent = valor ?? "";
+    return td;
 }
 
 // Consulta y renderizado del listado de usuarios
@@ -45,23 +52,27 @@ async function cargarUsuarios() {
     try {
         const respuesta = await fetch(API_URL);
         if (!respuesta.ok) throw new Error("Error en la respuesta del servidor");
-        
+
         const usuarios = await respuesta.json();
-        
+
         // Limpieza de datos previos en la tabla
         tbody.innerHTML = "";
-        
+
         usuarios.forEach(u => {
             const fila = document.createElement("tr");
-            fila.innerHTML = `
-                <td>${u.id}</td>
-                <td>${u.identificacion}</td>
-                <td>${u.nombre}</td>
-                <td>${u.apellido}</td>
-                <td>${u.correo}</td>
-                <td>${u.telefono}</td>
-                <td><strong>${u.rol.toUpperCase()}</strong></td>
-            `;
+            fila.appendChild(crearCelda(u.id));
+            fila.appendChild(crearCelda(u.identificacion));
+            fila.appendChild(crearCelda(u.nombre));
+            fila.appendChild(crearCelda(u.apellido));
+            fila.appendChild(crearCelda(u.correo));
+            fila.appendChild(crearCelda(u.telefono));
+
+            const tdRol = document.createElement("td");
+            const strongRol = document.createElement("strong");
+            strongRol.textContent = String(u.rol || "").toUpperCase();
+            tdRol.appendChild(strongRol);
+            fila.appendChild(tdRol);
+
             tbody.appendChild(fila);
         });
     } catch (error) {
@@ -90,7 +101,7 @@ formUsuario.addEventListener("submit", async (e) => {
             mostrarMensaje(resultado.message, "ok");
             formUsuario.reset();
             // Retorno automático a la vista de listado tras registro exitoso
-            setTimeout(() => btnVerLista.click(), 1500); 
+            setTimeout(() => btnVerLista.click(), 1500);
         } else {
             // Manejo de respuestas de validación o conflicto del servidor
             mostrarMensaje(resultado.message, "error");

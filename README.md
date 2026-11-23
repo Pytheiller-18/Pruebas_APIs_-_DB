@@ -1,131 +1,66 @@
-# Sistema POS - Módulo de Gestión de Usuarios
+# Repositorio de Pruebas de APIs y Bases de Datos
 
-Sistema para la administración y registro de usuarios en un entorno de Punto de Venta (POS). Desarrollado bajo una arquitectura desacoplada con un backend en Python (Flask) conectado a MySQL y un frontend ligero en HTML5, CSS3 y JavaScript moderno.
+Colección de módulos independientes para prácticas y pruebas de APIs REST y bases de datos MySQL / MariaDB.
 
----
-
-## Características
-
-- **Gestión de Usuarios**: Consulta y renderizado en tiempo real de los usuarios registrados en el sistema.
-- **Registro Seguro**:
-  - Validación de campos obligatorios en cliente y servidor.
-  - Validación de formato de correo electrónico mediante expresiones regulares.
-  - Encriptación de contraseñas utilizando hashing seguro (`werkzeug.security`).
-  - Control de duplicados en base de datos para `identificacion`, `correo` y `usuario` mediante restricciones de unicidad.
-- **Mapeo de Roles**: Asignación de roles de usuario (`cajero`, `administrador`).
-- **Arquitectura Limpia**: Separación de responsabilidades mediante rutas modulares (`Blueprints`), capa de modelo (`models`) y capa de configuración (`config`).
-
----
-
-## Estructura del Proyecto
+## Estructura del Repositorio
 
 ```text
-PROYECTO-POS/
-├── backend/
-│   ├── app.py                     # Punto de entrada de la aplicación Flask
-│   ├── requirements.txt           # Dependencias del backend
-│   ├── .env.example               # Plantilla de variables de entorno
-│   ├── config/
-│   │   ├── __init__.py
-│   │   └── db.py                  # Conexión a la base de datos MySQL
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── usuario_model.py       # Consultas y transacciones de usuarios
-│   └── routes/
-│       ├── __init__.py
-│       └── usuarios_routes.py     # Endpoints y validaciones de la API
-├── database/
-│   └── usuarios.sql               # Script de creación de base de datos y tablas
-├── frontend/
-│   ├── index.html                 # Redirección de entrada
-│   ├── usuarios.html              # Interfaz de gestión de usuarios
-│   ├── css/
-│   │   └── estilos.css            # Hoja de estilos de la interfaz
-│   └── js/
-│       └── usuarios.js            # Lógica de consumo de API y control del DOM
-├── .gitignore                     # Exclusión de archivos para Git
-└── README.md                      # Documentación del proyecto
+API/
+├── productos/               # API REST CRUD en PHP + cliente Python + Postman
+│   ├── api_crud.sql         # BD: api_crud (tabla productos)
+│   ├── conexion.php         # Conexión PDO a MySQL
+│   ├── productos.php        # Endpoints GET, POST, PUT, DELETE
+│   ├── main.py              # Cliente de consola en Python
+│   └── postman.docx         # Guía de pruebas en Postman
+├── gestion_motocicletas/    # Base de datos para gestión de motocicletas
+│   └── motocicletas.sql     # BD: gestion_motocicletas (tabla motocicletas)
+└── usuarios/                # API REST en Flask + frontend HTML/CSS/JS
+    ├── backend/
+    │   ├── app.py
+    │   ├── requirements.txt
+    │   ├── .env.example
+    │   ├── config/db.py
+    │   ├── models/usuario_model.py
+    │   └── routes/usuarios_routes.py
+    ├── database/
+    │   └── usuarios.sql     # BD: gestion_usuarios (tabla usuarios)
+    └── frontend/
+        ├── index.html
+        ├── usuarios.html
+        ├── css/estilos.css
+        └── js/usuarios.js
 ```
 
----
+## Módulos
 
-## Requisitos Previos
-
-- **Python**: Versión 3.10 o superior.
-- **MySQL Server**: Versión 8.0 o compatible (MySQL Workbench o phpMyAdmin).
-- **Navegador Web**: Cualquier navegador moderno con soporte para ES6+.
-
----
-
-## Instalación y Configuración
-
-### 1. Base de Datos
-
-1. Abra su cliente de MySQL (MySQL Workbench, terminal o phpMyAdmin).
-2. Ejecute el script ubicado en:
-   ```text
-   database/usuarios.sql
-   ```
-3. Esto creará la base de datos `bd_pos` y la tabla `usuarios` con los índices únicos correspondientes.
-
-### 2. Configuración del Backend
-
-1. Abra una terminal en la raíz del proyecto o en la carpeta `backend`.
-2. (Opcional pero recomendado) Cree y active un entorno virtual:
+### 1. `productos/` (PHP + MySQL + Python)
+1. Importa `productos/api_crud.sql` en MySQL / phpMyAdmin (crea la tabla `productos` dentro de `api_crud`).
+2. Sirve la carpeta en Apache/XAMPP (`http://localhost/API/productos/productos.php`).
+3. Ejecuta el cliente de prueba:
    ```bash
-   python -m venv venv
-   # En Windows:
-   venv\Scripts\activate
+   python productos/main.py
    ```
-3. Instale las dependencias necesarias:
+
+### 2. `gestion_motocicletas/` (SQL)
+1. Importa `gestion_motocicletas/motocicletas.sql` en MySQL / phpMyAdmin.
+2. El script crea automáticamente la base de datos `gestion_motocicletas`, la tabla `motocicletas` y sus datos iniciales.
+
+### 3. `usuarios/` (Flask + MySQL + Frontend)
+1. Ejecuta `usuarios/database/usuarios.sql` en MySQL / phpMyAdmin para crear la base de datos `gestion_usuarios` y la tabla `usuarios`.
+2. Instala las dependencias del backend:
    ```bash
-   pip install -r backend/requirements.txt
+   pip install -r usuarios/backend/requirements.txt
    ```
-4. Si su usuario o contraseña de MySQL difiere de los valores por defecto (`root` / `123456`), configure las variables de entorno basándose en `backend/.env.example` o ajústelas en `backend/config/db.py`.
+3. Configura variables de entorno si tus credenciales difieren de `root` / `123456` (usa `usuarios/backend/.env.example` como guía).
+4. Inicia el servidor Flask:
+   ```bash
+   cd usuarios/backend
+   python app.py
+   ```
+5. Abre `usuarios/frontend/usuarios.html` o `usuarios/frontend/index.html` en tu navegador.
 
-### 3. Ejecución del Servidor Backend
-
-Inicie el servidor de Flask:
-
-```bash
-cd backend
-python app.py
-```
-
-El servidor quedará disponible en: `http://127.0.0.1:5000`
-
----
-
-## Uso del Frontend
-
-Puede abrir directamente el archivo `frontend/usuarios.html` o `frontend/index.html` en su navegador web preferido, o servir la carpeta `frontend` mediante una extensión como **Live Server** en VS Code.
-
----
-
-## Endpoints de la API
-
+#### Endpoints disponibles (`usuarios`)
 | Método | Endpoint | Descripción | Códigos HTTP |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/usuarios` | Obtiene el listado completo de usuarios registrados. | `200`, `500` |
-| `POST` | `/api/usuarios` | Registra un nuevo usuario en la base de datos. | `201`, `400`, `409`, `500` |
-
-### Formato de Solicitud para Registro (`POST /api/usuarios`):
-
-```json
-{
-  "identificacion": "1234567890",
-  "nombre": "Juan",
-  "apellido": "Pérez",
-  "correo": "juan.perez@example.com",
-  "telefono": "3001234567",
-  "usuario": "jperez",
-  "password": "PasswordSeguro123",
-  "rol": "cajero"
-}
-```
-
----
-
-## Autor
-
-Desarrollado por [Pytheiller-18](https://github.com/Pytheiller-18).
+| `GET` | `/api/usuarios` | Lista todos los usuarios registrados | `200`, `500` |
+| `POST` | `/api/usuarios` | Registra un nuevo usuario (`usuario` o `administrador`) | `201`, `400`, `409`, `500` |
